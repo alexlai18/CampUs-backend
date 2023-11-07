@@ -33,6 +33,7 @@ router.get("/", async (req, res) => {
   try {
     const { email, val, userId } = req.query;
     
+    // If we get an email as query, we simply find the user with the corresponding email
     if (email) {
       const user = await User.findOne({email: email});
       if (!user || user.length === 0) {
@@ -41,9 +42,11 @@ router.get("/", async (req, res) => {
     
       return res.json(user);
     } else if (val) {
+      // If we get a search value from the query, we look for all users with the substring
       const users = await User.find();
       const results = [];
   
+      // This gets all the users (except for user who searched) and pushes it onto an array of users
       async function getSearchUsers() {
         await Promise.all(
           users.map(async (u) => {
@@ -65,6 +68,7 @@ router.get("/", async (req, res) => {
       }
       await getSearchUsers();
   
+      // This sorts the array of users by the position of the substring, and then by the frequency
       const sortedNames = results.sort((a, b) => {
         const idxA = a.fullName.toLowerCase().indexOf(val.toLowerCase());
         const idxB = b.fullName.toLowerCase().indexOf(val.toLowerCase());
@@ -77,6 +81,7 @@ router.get("/", async (req, res) => {
   
       return res.json(sortedNames);
     } else {
+      // Return all users
       const users = await User.find();
 
       if (!users || users.length === 0) {
@@ -105,67 +110,75 @@ router.get("/:id", async (req, res) => {
 
 // Update a user
 router.patch("/:id", async (req, res) => {
-  const { id } = req.params;
-  const { email, password, details } = await req.body;
-
-  const user = await User.findById(id);
-
-  if (!user) {
-    return res.status(404).json({ message: "This user does not exist"});
-  }
-
-  const detailId = user.details[0];
-
-  // Checking if they have a UserDetail document, if so, udpate the document. If not, create a new one
-  if (detailId) {
-    const detailInfo = await UserDetail.findOne({_id: detailId});
-    await UserDetail.findByIdAndUpdate(detailId[0],
-      {
-        fname: details.fname || detailInfo.fname,
-        lname: details.lname || detailInfo.lname,
-        grade: details.grade || detailInfo.grade,
-        about: details.about || detailInfo.about,
-        uni: details.uni || detailInfo.uni,
-        currentGroups: details.currentGroups || detailInfo.currentGroups,
-        pastGroups: details.pastGroups || detailInfo.pastGroups,
-     }
-    );
-    const modDetails = await UserDetail.findById(detailId[0]);
-    await User.findByIdAndUpdate(id,
-      {
-        email: email || user.email,
-        password: password || user.password,
-      }
-    );
-    return res.json(modDetails);
-  } else {
-    const detailInfo = await UserDetail.create(
-      {
-        fname: details.fname,
-        lname: details.lname,
-        grade: details.grade,
-        about: details.about,
-        uni: details.uni,
-        currentGroups: details.currentGroups,
-        pastGroups: details.pastGroups,
-      }
-    )
-    await User.findByIdAndUpdate(id, 
-      {
-        email: email || user.email,
-        password: password || user.password,
-        details: detailInfo
-      }
-    );
-    return res.json(detailInfo);
+  try {
+    const { id } = req.params;
+    const { email, password, details } = await req.body;
+  
+    const user = await User.findById(id);
+  
+    if (!user) {
+      return res.status(404).json({ message: "This user does not exist"});
+    }
+  
+    const detailId = user.details[0];
+  
+    // Checking if they have a UserDetail document, if so, udpate the document. If not, create a new one
+    if (detailId) {
+      const detailInfo = await UserDetail.findOne({_id: detailId});
+      await UserDetail.findByIdAndUpdate(detailId[0],
+        {
+          fname: details.fname || detailInfo.fname,
+          lname: details.lname || detailInfo.lname,
+          grade: details.grade || detailInfo.grade,
+          about: details.about || detailInfo.about,
+          uni: details.uni || detailInfo.uni,
+          currentGroups: details.currentGroups || detailInfo.currentGroups,
+          pastGroups: details.pastGroups || detailInfo.pastGroups,
+       }
+      );
+      const modDetails = await UserDetail.findById(detailId[0]);
+      await User.findByIdAndUpdate(id,
+        {
+          email: email || user.email,
+          password: password || user.password,
+        }
+      );
+      return res.json(modDetails);
+    } else {
+      const detailInfo = await UserDetail.create(
+        {
+          fname: details.fname,
+          lname: details.lname,
+          grade: details.grade,
+          about: details.about,
+          uni: details.uni,
+          currentGroups: details.currentGroups,
+          pastGroups: details.pastGroups,
+        }
+      )
+      await User.findByIdAndUpdate(id, 
+        {
+          email: email || user.email,
+          password: password || user.password,
+          details: detailInfo
+        }
+      );
+      return res.json(detailInfo);
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 })
 
 // Delete a user
 router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  await User.findByIdAndDelete(id);
-  return res.json({ message: "User Deleted" });
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    return res.json({ message: "User Deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 })
 
 module.exports = router;

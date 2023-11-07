@@ -14,6 +14,9 @@ app.use(express.json());
 const usersRouter = require("./routes/users");
 app.use("/users", usersRouter);
 
+const coursesRouter = require("./routes/courses");
+app.use("/course", coursesRouter);
+
 app.listen(5000, () => {
   console.log("Server Running on Port: 5000");
 })
