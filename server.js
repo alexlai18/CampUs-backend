@@ -17,6 +17,12 @@ app.use("/users", usersRouter);
 const coursesRouter = require("./routes/courses");
 app.use("/course", coursesRouter);
 
+const notificationsRouter = require("./routes/notifications");
+app.use("/notifications", notificationsRouter);
+
+const detailsRouter = require("./routes/details");
+app.use("/details", detailsRouter);
+
 app.listen(5000, () => {
   console.log("Server Running on Port: 5000");
 })
