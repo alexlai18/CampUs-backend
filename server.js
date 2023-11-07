@@ -12,7 +12,11 @@ app.listen(PORT, () => {
 mongoose.connect(process.env.MONGODB_URI);
 const db = mongoose.connection;
 
-db.once('open', () => console.log("Connected to Database"))
+app.get('/', (req, res) => {
+  res.send('Hey this is my API running')
+});
+
+db.once('open', () => console.log("Connected to Database"));
 
 app.use(express.json());
 
