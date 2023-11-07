@@ -21,27 +21,27 @@ db.once('open', () => console.log("Connected to Database"));
 app.use(express.json());
 
 const usersRouter = require("./routes/users");
-app.use("/users", usersRouter);
+app.use("/api/v1/users", usersRouter);
 
 const coursesRouter = require("./routes/courses");
-app.use("/course", coursesRouter);
+app.use("/api/v1/course", coursesRouter);
 
 const notificationsRouter = require("./routes/notifications");
-app.use("/notifications", notificationsRouter);
+app.use("/api/v1/notifications", notificationsRouter);
 
 const detailsRouter = require("./routes/details");
-app.use("/details", detailsRouter);
+app.use("/api/v1/details", detailsRouter);
 
 const userDetailsRouter = require("./routes/usercourse");
-app.use("/usercourse", userDetailsRouter);
+app.use("/api/v1/usercourse", userDetailsRouter);
 
 const loginRouter = require("./routes/login");
-app.use("/login", loginRouter);
+app.use("/api/v1/login", loginRouter);
 
 const friendsRouter = require("./routes/friends");
-app.use("/friends", friendsRouter);
+app.use("/api/v1/friends", friendsRouter);
 
 const groupRouter = require("./routes/group");
-app.use("/group", groupRouter);
+app.use("/api/v1/group", groupRouter);
 
 module.exports = app;
