@@ -5,10 +5,6 @@ const app = express();
 const mongoose = require("mongoose");
 const PORT = 5000
 
-app.listen(PORT, () => {
-  console.log("Server Running on Port: 5000");
-})
-
 mongoose.connect(process.env.MONGODB_URI);
 const db = mongoose.connection;
 
@@ -43,5 +39,9 @@ app.use("/api/v1/friends", friendsRouter);
 
 const groupRouter = require("./routes/group");
 app.use("/api/v1/group", groupRouter);
+
+app.listen(PORT, () => {
+  console.log("Server Running on Port: 5000");
+})
 
 module.exports = app;
