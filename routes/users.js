@@ -120,11 +120,11 @@ router.patch("/:id", async (req, res) => {
       return res.status(404).json({ message: "This user does not exist"});
     }
   
-    const detailId = user.details[0];
+    const detailId = user.details;
   
     // Checking if they have a UserDetail document, if so, udpate the document. If not, create a new one
     if (detailId) {
-      const detailInfo = await UserDetail.findOne({_id: detailId});
+      const detailInfo = await UserDetail.findOne({_id: detailId[0]});
       await UserDetail.findByIdAndUpdate(detailId[0],
         {
           fname: details.fname || detailInfo.fname,
