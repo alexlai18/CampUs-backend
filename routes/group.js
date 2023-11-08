@@ -99,6 +99,10 @@ router.patch("/:id", async (req, res) => {
   const { id } = req.params;
   const { userId } = await req.body;
 
+  if (!userId || !id) {
+    return res.status(400).json({message: "Provide a group or userId"});
+  }
+
   const group = await Group.findById(id);
   const members = group.members;
   if (!members.includes(userId)) {
@@ -115,6 +119,10 @@ router.patch("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const { id } = req.params;
   const { userId } = await req.body;
+
+  if (!userId || !id) {
+    return res.status(400).json({message: "Provide a group or userId"});
+  }
 
   const group = await Group.findById(id);
   const members = group.members;
