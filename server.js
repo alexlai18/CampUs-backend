@@ -42,6 +42,9 @@ app.use("/api/v1/friends", friendsRouter);
 const groupRouter = require("./routes/group");
 app.use("/api/v1/group", groupRouter);
 
+const profileImgRouter = require("./routes/profileimg");
+app.use("/api/v1/profileImg", profileImgRouter);
+
 app.listen(PORT, () => {
   console.log("Server Running on Port: 5000");
 })

@@ -12,7 +12,8 @@ const userDetailSchema = new mongoose.Schema(
     currentGroups: [{type: mongoose.Schema.ObjectId, ref: 'Group'}],
     pastGroups: [{type: mongoose.Schema.ObjectId, ref: 'Group'}],
     currentCourses: [{type: mongoose.Schema.ObjectId, ref: 'Course'}],
-    pastCourses: [{type: mongoose.Schema.ObjectId, ref: 'Course'}]
+    pastCourses: [{type: mongoose.Schema.ObjectId, ref: 'Course'}],
+    profilePic: String
   },
 );
 
