@@ -4,6 +4,11 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 app.use(cors());
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.json({ limit: '15mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '15mb' }));
+
 const mongoose = require("mongoose");
 const PORT = 5000
 
