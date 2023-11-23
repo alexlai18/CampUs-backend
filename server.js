@@ -4,6 +4,11 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 app.use(cors());
+
+const bodyParser = require('body-parser');
+app.use(bodyParser.json({ limit: '15mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '15mb' }));
+
 const mongoose = require("mongoose");
 const PORT = 5000
 
@@ -41,6 +46,9 @@ app.use("/api/v1/friends", friendsRouter);
 
 const groupRouter = require("./routes/group");
 app.use("/api/v1/group", groupRouter);
+
+const profileImgRouter = require("./routes/profileimg");
+app.use("/api/v1/profileImg", profileImgRouter);
 
 app.listen(PORT, () => {
   console.log("Server Running on Port: 5000");
